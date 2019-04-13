@@ -1,5 +1,4 @@
 class Hand {
-
   constructor() {
     this.cardsInHand = {};
   }
@@ -22,11 +21,18 @@ class Hand {
     } else if (this.containsId(NECROMANCER) || newCard.id === NECROMANCER) {
       var targetFound = false;
       for (const card of this.cards()) {
-        if (card.card.id !== NECROMANCER && deck.getCardById(NECROMANCER).relatedSuits.includes(card.card.suit)) {
+        if (
+          card.card.id !== NECROMANCER &&
+          deck.getCardById(NECROMANCER).relatedSuits.includes(card.card.suit)
+        ) {
           targetFound = true;
         }
       }
-      return targetFound || this.containsId(NECROMANCER) && deck.getCardById(NECROMANCER).relatedSuits.includes(newCard.suit);
+      return (
+        targetFound ||
+        (this.containsId(NECROMANCER) &&
+          deck.getCardById(NECROMANCER).relatedSuits.includes(newCard.suit))
+      );
     } else {
       return false;
     }
@@ -50,7 +56,10 @@ class Hand {
   }
 
   containsId(cardId) {
-    return this.cardsInHand[cardId] !== undefined && !this.cardsInHand[cardId].blanked;
+    return (
+      this.cardsInHand[cardId] !== undefined &&
+      !this.cardsInHand[cardId].blanked
+    );
   }
 
   containsSuit(suitName) {
@@ -139,7 +148,11 @@ class Hand {
 
   _applyBlanking() {
     for (const card of this.cards()) {
-      if (card.blanks !== undefined && !card.penaltyCleared && !this._cardBlanked(card)) {
+      if (
+        card.blanks !== undefined &&
+        !card.penaltyCleared &&
+        !this._cardBlanked(card)
+      ) {
         for (const target of this.cards()) {
           if (card.blanks(target, this)) {
             target.blanked = true;
@@ -186,16 +199,16 @@ class Hand {
     var actions = [];
     for (const card of this.cards()) {
       if (card.actionData !== undefined) {
-        actions.push(card.id + ':' + card.actionData.join(':'));
+        actions.push(card.id + ":" + card.actionData.join(":"));
       }
     }
-    return Object.keys(this.cardsInHand).join() + '+' + actions.join();
+    return Object.keys(this.cardsInHand).join() + "+" + actions.join();
   }
 
   loadFromString(string) {
-    var parts = string.split('+');
-    var cardIds = parts[0].split(',');
-    var cardActions = parts[1].split(',').map(action => action.split(':'));
+    var parts = string.split("+");
+    var cardIds = parts[0].split(",");
+    var cardActions = parts[1].split(",").map(action => action.split(":"));
     this.loadFromArrays(cardIds, cardActions);
   }
 
@@ -218,13 +231,11 @@ class Hand {
     var actionCard = this.getCardById(id);
     this.cardsInHand[id] = new CardInHand(actionCard.card, undefined);
   }
-
 }
 
 var hand = new Hand();
 
 class CardInHand {
-
   constructor(card, actionData) {
     this.card = card;
     this.actionData = actionData;
@@ -232,6 +243,8 @@ class CardInHand {
     this.id = card.id;
     this.name = card.name;
     this.suit = card.suit;
+    this.localizedName = card.localizedName;
+    this.localizedSuit = card.localizedSuit;
     this.strength = card.strength;
     this.bonus = card.bonus;
     this.penalty = card.penalty;
@@ -278,17 +291,20 @@ class CardInHand {
           this.penalty = selectedCard.penalty;
           this.penaltyScore = selectedCard.penaltyScore;
           this.blanks = selectedCard.blanks;
-          this.blankedIf = selectedCard.blankedIf
+          this.blankedIf = selectedCard.blankedIf;
           this.magic = true;
         }
       } else if (this.id === ISLAND) {
         var selectedCard = hand.getCardById(this.actionData[0]);
-        if (selectedCard === undefined || !(selectedCard.suit === 'Flood' || selectedCard.suit === 'Flame')) {
+        if (
+          selectedCard === undefined ||
+          !(selectedCard.suit === "Flood" || selectedCard.suit === "Flame")
+        ) {
           this.actionData = undefined;
         } else {
           this.clearsPenalty = function(card) {
             return card.id === selectedCard.id;
-          }
+          };
           selectedCard.magic = true;
         }
       }
@@ -313,7 +329,8 @@ class CardInHand {
   }
 
   points() {
-    return this.blanked ? 0 : (this.strength + this.bonusPoints + this.penaltyPoints);
+    return this.blanked
+      ? 0
+      : this.strength + this.bonusPoints + this.penaltyPoints;
   }
-
 }

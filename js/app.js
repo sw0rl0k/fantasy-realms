@@ -3,10 +3,10 @@ $(document).ready(function() {
   getHandFromQueryString();
 });
 
-var click = new Audio('sound/click.mp3');
-var swoosh = new Audio('sound/swoosh.mp3');
-var clear = new Audio('sound/clear.mp3');
-var magic = new Audio('sound/magic.mp3');
+var click = new Audio("sound/click.mp3");
+var swoosh = new Audio("sound/swoosh.mp3");
+var clear = new Audio("sound/clear.mp3");
+var magic = new Audio("sound/magic.mp3");
 var actionId = NONE;
 var bookOfChangesSelectedCard = NONE;
 var bookOfChangesSelectedSuit = undefined;
@@ -56,7 +56,7 @@ function selectFromHand(id) {
   } else if (actionId === ISLAND) {
     var selectedCard = hand.getCardById(id);
     var island = hand.getCardById(ISLAND);
-    if (selectedCard.suit === 'Flood' || selectedCard.suit === 'Flame') {
+    if (selectedCard.suit === "Flood" || selectedCard.suit === "Flame") {
       actionId = NONE;
       click.play();
       magic.play();
@@ -78,14 +78,14 @@ function updateHandView() {
   var template = Handlebars.compile($("#hand-template").html());
   var score = hand.score();
   var html = template(hand);
-  $('#hand').html(html);
+  $("#hand").html(html);
   if (score >= 0) {
-    $('#points').text(('000' + score).slice(-3));
+    $("#points").text(("000" + score).slice(-3));
   } else {
-    $('#points').text('-' + ('000' + Math.abs(score)).slice(-3));
+    $("#points").text("-" + ("000" + Math.abs(score)).slice(-3));
   }
-  $('#cardCount').text(hand.size());
-  $('#cardLimit').text(hand.limit());
+  $("#cardCount").text(hand.size());
+  $("#cardLimit").text(hand.limit());
   if (hand.size() > 0) {
     history.replaceState(null, null, "index.html?hand=" + hand.toString());
   } else {
@@ -94,10 +94,12 @@ function updateHandView() {
 }
 
 function getHandFromQueryString() {
-  var params = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  var params = window.location.href
+    .slice(window.location.href.indexOf("?") + 1)
+    .split("&");
   for (var i = 0; i < params.length; i++) {
-    var param = params[i].split('=');
-    if (param[0] === 'hand') {
+    var param = params[i].split("=");
+    if (param[0] === "hand") {
       hand.loadFromString(param[1]);
       updateHandView();
     }
@@ -115,7 +117,7 @@ function useCard(id) {
     var html = template({
       suits: allSuits()
     });
-    $('#cards').html(html);
+    $("#cards").html(html);
   } else if (id === SHAPESHIFTER || id == MIRAGE) {
     hand.undoCardAction(id);
     var duplicator = hand.getCardById(id);
@@ -126,14 +128,20 @@ function useCard(id) {
     hand.undoCardAction(id);
   }
   updateHandView();
-  $('#card-action-text-' + id).text(deck.getCardById(id).action);
+  $("#card-action-text-" + id).text(deck.getCardById(id).action);
 }
 
 function performBookOfChanges() {
-  if (bookOfChangesSelectedCard !== NONE && bookOfChangesSelectedSuit !== undefined) {
+  if (
+    bookOfChangesSelectedCard !== NONE &&
+    bookOfChangesSelectedSuit !== undefined
+  ) {
     magic.play();
     var bookOfChanges = hand.getCardById(BOOK_OF_CHANGES);
-    bookOfChanges.actionData = [bookOfChangesSelectedCard, bookOfChangesSelectedSuit];
+    bookOfChanges.actionData = [
+      bookOfChangesSelectedCard,
+      bookOfChangesSelectedSuit
+    ];
     showCards();
     updateHandView();
     actionId = NONE;
@@ -151,5 +159,5 @@ function showCards(suits) {
   var html = template({
     suits: deck.getCardsBySuit(suits)
   });
-  $('#cards').html(html);
+  $("#cards").html(html);
 }

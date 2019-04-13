@@ -2,7 +2,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Fantasy Realms: App of Scoring</title>
+  <title>Волшебные королевства: Подсчет очков</title>
   <meta name="description" content="Fantasy Realms: App of Scoring">
   <meta name="author" content="Jimmy Praet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,12 +38,12 @@
     {{#each suits}}
     <div class="card">
       <div class="card-header" role="tab" id="{{@key}}Header" data-toggle="collapse" data-parent="#cards" href="#{{@key}}" aria-expanded="false" aria-controls="{{@key}}">
-        <a>{{@key}}</a>
+        <a>{{loc @key}}</a>
       </div>
       <div id="{{@key}}" class="collapse" role="tabpanel" aria-labelledby="{{@key}}Header">
         <ul class="list-group">
           {{#each this}}
-          <li class="list-group-item {{suit}}" onclick="addToHand({{id}})"><span class="badge badge-default">{{strength}}</span> {{name}}</li>
+          <li class="list-group-item {{suit}}" onclick="addToHand({{id}})"><span class="badge badge-default">{{strength}}</span> {{localizedName}}</li>
           {{/each}}
         </ul>
       </div>
@@ -70,7 +70,7 @@
             {{else}}
               {{strength}}
             {{/if}}
-          </span> {{name}}
+          </span> {{localizedName}}
           {{#if magic}}
           *
           {{/if}}
@@ -95,7 +95,7 @@
         {{#if card.action}}
         <li class="list-group-item bonus">
             <span id="card-action-text-{{id}}" />
-            <button id="card-action-{{id}}" type="button" class="btn btn-sm btn-primary float-right" onclick="event.stopPropagation(); useCard({{id}});">Use</button>
+            <button id="card-action-{{id}}" type="button" class="btn btn-sm btn-primary float-right" onclick="event.stopPropagation(); useCard({{id}});">Выбрать</button>
         </li>
         {{/if}}
       </ul>
@@ -110,12 +110,13 @@
           <span id="cardCount">0</span><span class="separator">/</span><span id="cardLimit">7</span>
           <span id="points">000</span>
         </div>
-        <button id="clear" type="button" class="btn btn-success" onclick="clearHand()">Reset</button>
+        <button id="clear" type="button" class="btn btn-success" onclick="clearHand()">Сброс</button>
       </div>
     </div>
     <div id="main">
       <div id="left">
         <div id="cards" class="panel" role="tablist" aria-multiselectable="true"></div>
+        <div class="copy">Автор: <a href="https://jpraet.github.io/fantasy-realms/index.html">Jimmy Praet</a>. <br> Перевод: <a href="https://github.com/sw0rl0k/fantasy-realms">Иван Фадеев</a>.</div>
       </div>
       <div id="right">
         <div id="hand">
@@ -129,6 +130,23 @@
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/fantasy-realms/service-worker.js', {scope: '/fantasy-realms/'});
   }
+  
+  Handlebars.registerHelper("loc", function(key) {
+    const LOCALIZATION = {
+    Land: "Земля",
+    Flood: "Потоп",
+    Weather: "Погода",
+    Flame: "Пламя",
+    Army: "Войско",
+    Wizard: "Колдун",
+    Leader: "Правитель",
+    Beast: "Зверь",
+    Weapon: "Оружие",
+    Artifact: "Артефакт",
+    Wild: "Джокер"
+  };
+    return LOCALIZATION[key];
+  });
 </script>
 
 </html>

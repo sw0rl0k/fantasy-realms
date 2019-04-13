@@ -47,7 +47,8 @@ body {
   color: #c3a332;
 }
 
-#cardCount, #cardLimit {
+#cardCount,
+#cardLimit {
   color: #995153;
 }
 
@@ -56,14 +57,24 @@ span.separator {
 }
 
 #left {
-  width: 10rem;
+  position: relative;
+  width: 11rem;
   background-color: #ccc0a8;
 }
 
 #right {
   background-color: #e9e3c6;
   min-height: 100%;
-  width: calc(100% - 10rem);
+  width: calc(100% - 11rem);
+}
+
+.copy {
+  position: absolute;
+  bottom: 10px;
+  width: 11rem;
+  opacity: 0.8;
+  font-size: 10px;
+  text-align: center;
 }
 
 li.list-group-item {
@@ -161,10 +172,12 @@ span.wild {
 }
 
 #cards {
+  margin-bottom: 50px;
   background-color: #ccc0a8;
 }
 
-#cards .card-header, #hand .card-header {
+#cards .card-header,
+#hand .card-header {
   padding: 0.4rem;
   font-weight: bold;
   background-color: #ccc0a8;
@@ -177,7 +190,8 @@ span.wild {
   font-weight: bold;
 }
 
-#cards li, #hand li {
+#cards li,
+#hand li {
   font-weight: bold;
   padding: 0.4rem;
   cursor: pointer;
@@ -187,7 +201,8 @@ span.wild {
   padding-right: 0;
 }
 
-#hand li.bonus, #hand li.penalty {
+#hand li.bonus,
+#hand li.penalty {
   background-color: #fffafa;
   color: grey;
   font-weight: normal;
@@ -221,7 +236,8 @@ span.penalty {
   color: red;
 }
 
-.cleared, .cleared:hover {
+.cleared,
+.cleared:hover {
   text-decoration: line-through;
 }
 
